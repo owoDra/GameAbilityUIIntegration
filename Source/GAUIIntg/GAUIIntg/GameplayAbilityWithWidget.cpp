@@ -2,6 +2,9 @@
 
 #include "GameplayAbilityWithWidget.h"
 
+#include "GAUIIntgLogs.h"
+
+#include "Extension/UIExtensionPointTypes.h"
 #include "Extension/UIExtensionPointSubsystem.h"
 
 #include "Blueprint/UserWidget.h"
@@ -24,8 +27,10 @@ void UGameplayAbilityWithWidget::OnGiveAbility(const FGameplayAbilityActorInfo* 
 	if (ActorInfo->IsLocallyControlled())
 	{
 		auto* Subsystem{ GetWorld()->GetSubsystem<UUIExtensionPointSubsystem>() };
-		auto* OwningActor{ ActorInfo->OwnerActor.Get() };
 
+		auto PlayerController{ ActorInfo->PlayerController };
+		auto* LocalPlayer{ PlayerController.IsValid() ? PlayerController->GetLocalPlayer() : nullptr };
+		
 		for (const auto& KVP : WidgetToAdd)
 		{
 			const auto& Tag{ KVP.Key };
@@ -33,7 +38,7 @@ void UGameplayAbilityWithWidget::OnGiveAbility(const FGameplayAbilityActorInfo* 
 
 			if (Tag.IsValid() && Class)
 			{
-				auto Handle{ Subsystem->RegisterExtensionAsWidgetForContext(Tag, OwningActor, Class, -1) };
+				auto Handle{ Subsystem->RegisterExtensionAsWidgetForContext(Tag, LocalPlayer, Class, -1) };
 
 				AddedExtensionHandles.Add(Handle);
 			}

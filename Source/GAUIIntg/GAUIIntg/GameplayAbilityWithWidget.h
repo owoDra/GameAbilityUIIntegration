@@ -4,11 +4,10 @@
 
 #include "GAEGameplayAbility.h"
 
-#include "Extension/UIExtensionPointTypes.h"
-
 #include "GameplayAbilityWithWidget.generated.h"
 
 class UUserWidget;
+struct FUIExtensionHandle;
 
 
 /**
